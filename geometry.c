@@ -65,6 +65,14 @@ void take_info_circle(Circle* circle, int* column)
     circle->raduis = get_number(column);
 }
 
+void show_info_circle(Circle* circle)
+{
+    printf("circle(%.1f %.1f, %.1f)\n",
+           circle->point.x,
+           circle->point.y,
+           circle->raduis);
+}
+
 int main()
 {
     char geom[NAME_SIZE];
@@ -80,7 +88,7 @@ int main()
                     Circle circle;
                     to_lower_string(geom);
                     take_info_circle(&circle, &column);
-
+                    show_info_circle(&circle);
                     break;
                 } else {
                     puts("Error: expected 'circle'");
