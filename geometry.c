@@ -1,7 +1,16 @@
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #define NAME_SIZE 25
+
+void to_lower_string(char* string)
+{
+    while (*string != '\0') {
+        *string = tolower(*string);
+        string++;
+    }
+}
 
 int main()
 {
@@ -15,6 +24,7 @@ int main()
         do {
             if (ch == '(' || ch == ' ') {
                 if (strcmp(geom, "circle") == 0) {
+                    to_lower_string(geom);
                     puts(geom);
                     break;
                 } else {
