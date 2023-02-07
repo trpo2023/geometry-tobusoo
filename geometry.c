@@ -57,10 +57,15 @@ double get_number(int* column)
     return strtod(temp, &eptr);
 }
 
+void get_point(Point* point, int* column)
+{
+    point->x = get_number(column);
+    point->y = get_number(column);
+}
+
 void take_info_circle(Circle* circle, int* column)
 {
-    circle->point.x = get_number(column);
-    circle->point.y = get_number(column);
+    get_point(&circle->point, column);
     getchar();
     circle->raduis = get_number(column);
 }
