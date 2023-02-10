@@ -1,4 +1,5 @@
 #include <ctype.h>
+#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -229,14 +230,18 @@ void take_info_circle(Circle* circle, int* column, int is_file, FILE* file)
 
         end_of_line(column, NOT_FILE, file);
     }
+    circle->perimeter = 2 * M_PI * circle->raduis;
+    circle->area = M_PI * circle->raduis * circle->raduis;
 }
 
 void show_info_circle(Circle* circle)
 {
-    printf("circle(%.1f %.1f, %.1f)\n",
+    printf("circle(%.2f %.2f, %.2f)\n",
            circle->point.x,
            circle->point.y,
            circle->raduis);
+    printf("\tarea = %.4f\n", circle->area);
+    printf("\tperimetr = %.4f\n", circle->perimeter);
 }
 
 void parser_stdin(FILE* stdin)
