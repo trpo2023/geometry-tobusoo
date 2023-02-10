@@ -18,14 +18,15 @@ typedef struct circle {
 } Circle;
 
 enum Errors {
+    _FILE,
+    NOT_FILE,
     ER_NAME,
     ER_NOT_DOUBLE,
     ER_BACK_BRACE,
     ER_UNEXPECT_TOKEN,
     ER_EXPECT_COMMA,
     ER_UNEXPECT_COMMA,
-    _FILE,
-    NOT_FILE
+
 };
 
 void print_error(int column, int status, int is_file, FILE* file)
@@ -40,25 +41,34 @@ void print_error(int column, int status, int is_file, FILE* file)
     for (int i = 0; i < column; i++) {
         putchar(' ');
     }
-    printf("^\n");
+    printf("\e[1;31m^\e[0m\n");
     switch (status) {
     case ER_NAME:
-        printf("Error at column %d: expected 'circle'\n", column);
+        printf("\e[1;31mError\e[0m at column %d: \e[1;31mexpected "
+               "'circle'\e[0m\n",
+               column);
         break;
     case ER_NOT_DOUBLE:
-        printf("Error at column %d: expected '<double>'\n", column);
+        printf("\e[1;31mError\e[0m at column %d: \e[1;31mexpected "
+               "'<double>'\e[0m\n",
+               column);
         break;
     case ER_BACK_BRACE:
-        printf("Error at column %d: expected ')'\n", column);
+        printf("\e[1;31mError\e[0m at column %d: \e[1;31mexpected ')'\e[0m\n",
+               column);
         break;
     case ER_UNEXPECT_TOKEN:
-        printf("Error at column %d: unexpected token\n", column);
+        printf("\e[1;31mError\e[0m at column %d: \e[1;31munexpected "
+               "token\e[0m\n",
+               column);
         break;
     case ER_EXPECT_COMMA:
-        printf("Error at column %d: expected ','\n", column);
+        printf("\e[1;31mError\e[0m at column %d: \e[1;31mexpected ','\e[0m\n",
+               column);
         break;
     case ER_UNEXPECT_COMMA:
-        printf("Error at column %d: unexpected ','\n", column);
+        printf("\e[1;31mError\e[0m at column %d: \e[1;31munexpected ','\e[0m\n",
+               column);
     }
 }
 
@@ -265,7 +275,7 @@ void parser_stdin(FILE* stdin)
     }
 }
 
-void parsFILE(FILE* file)
+void parser_file(FILE* file)
 {
     char geom[NAME_SIZE];
     char ch;
@@ -309,7 +319,7 @@ int main(int argc, char* argv[])
             printf("Error: can't open file \"%s\"\n", argv[1]);
             exit(EXIT_FAILURE);
         } else {
-            parsFILE(file);
+            parser_file(file);
             fclose(file);
         }
     } else {
