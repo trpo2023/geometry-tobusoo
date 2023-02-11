@@ -27,7 +27,6 @@ enum Errors {
     ER_UNEXPECT_TOKEN,
     ER_EXPECT_COMMA,
     ER_UNEXPECT_COMMA,
-
 };
 
 void print_error(int column, int status, int is_file, FILE* file)
@@ -96,7 +95,9 @@ double get_number(int* column, int is_file, FILE* file)
 {
     char temp[25];
     char ch;
-    int point_count = 0, i = 0;
+    int point_count = 0;
+    int i = 0;
+    int minus_count = 0;
 
     del_space(column, file);
 
@@ -106,6 +107,17 @@ double get_number(int* column, int is_file, FILE* file)
         if (temp[i] == '.') {
             point_count++;
             if (point_count > 1) {
+                if (is_file == _FILE)
+                    print_error(*column + i + 1, ER_NOT_DOUBLE, _FILE, file);
+                else
+                    print_error(*column + i + 1, ER_NOT_DOUBLE, NOT_FILE, file);
+                exit(EXIT_FAILURE);
+            }
+        }
+
+        if (temp[i] == '-') {
+            minus_count++;
+            if (minus_count > 1) {
                 if (is_file == _FILE)
                     print_error(*column + i + 1, ER_NOT_DOUBLE, _FILE, file);
                 else
@@ -222,7 +234,7 @@ void take_info_circle(Circle* circle, int* column, int is_file, FILE* file)
         end_of_line(column, _FILE, file);
     } else {
         get_point(&circle->point, column, NOT_FILE, file);
-        expect(',', column, ER_EXPECT_COMMA, _FILE, file);
+        expect(',', column, ER_EXPECT_COMMA, NOT_FILE, file);
 
         circle->raduis = get_number(column, NOT_FILE, file);
 
@@ -321,14 +333,15 @@ int main(int argc, char* argv[])
         parser_stdin(stdin);
     else if (argc == 2) {
         if ((file = fopen(argv[1], "r")) == NULL) {
-            printf("Error: can't open file \"%s\"\n", argv[1]);
+            printf("\e[1;31mError\e[0m: can't open file \e[1;35m\"%s\"\e[0m\n",
+                   argv[1]);
             exit(EXIT_FAILURE);
         } else {
             parser_file(file);
             fclose(file);
         }
     } else {
-        printf("Usage: %s <filename>\n", argv[0]);
+        printf("\e[1;35mUsage\e[0m: %s <filename>\n", argv[0]);
     }
 
     return 0;
