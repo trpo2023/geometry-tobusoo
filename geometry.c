@@ -134,7 +134,7 @@ double get_number(int* column, int is_file, FILE* file)
             exit(EXIT_FAILURE);
         }
 
-        if (!isdigit(temp[i]) && temp[i] != '.') {
+        if (!isdigit(temp[i]) && temp[i] != '.' && temp[i] != '-') {
             i++;
             if (is_file == _FILE)
                 print_error(*column + i, ER_NOT_DOUBLE, _FILE, file);
@@ -186,13 +186,11 @@ void get_point(Point* point, int* column, int is_file, FILE* file)
         unexpect(',', column, ER_UNEXPECT_COMMA, _FILE, file);
 
         point->y = get_number(column, _FILE, file);
-        expect(',', column, ER_EXPECT_COMMA, _FILE, file);
     } else {
         point->x = get_number(column, NOT_FILE, file);
         unexpect(',', column, ER_UNEXPECT_COMMA, NOT_FILE, file);
 
         point->y = get_number(column, NOT_FILE, file);
-        expect(',', column, ER_EXPECT_COMMA, NOT_FILE, file);
     }
 }
 
@@ -215,6 +213,7 @@ void take_info_circle(Circle* circle, int* column, int is_file, FILE* file)
 {
     if (is_file == _FILE) {
         get_point(&circle->point, column, _FILE, file);
+        expect(',', column, ER_EXPECT_COMMA, _FILE, file);
 
         circle->raduis = get_number(column, _FILE, file);
 
@@ -223,6 +222,7 @@ void take_info_circle(Circle* circle, int* column, int is_file, FILE* file)
         end_of_line(column, _FILE, file);
     } else {
         get_point(&circle->point, column, NOT_FILE, file);
+        expect(',', column, ER_EXPECT_COMMA, _FILE, file);
 
         circle->raduis = get_number(column, NOT_FILE, file);
 
@@ -241,12 +241,12 @@ void show_info_circle(Circle* circle)
            circle->point.y,
            circle->raduis);
     printf("\tarea = %.4f\n", circle->area);
-    printf("\tperimetr = %.4f\n", circle->perimeter);
+    printf("\tperimeter = %.4f\n", circle->perimeter);
 }
 
 void parser_stdin(FILE* stdin)
 {
-    char geom[NAME_SIZE];
+    char geom[NAME_SIZE] = {0};
     char ch;
     int column;
 
@@ -282,7 +282,7 @@ void parser_stdin(FILE* stdin)
 
 void parser_file(FILE* file)
 {
-    char geom[NAME_SIZE];
+    char geom[NAME_SIZE] = {0};
     char ch;
     int column;
 
