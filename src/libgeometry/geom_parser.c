@@ -1,33 +1,11 @@
 #include <ctype.h>
+#include <libgeometry/geom_parser.h>
 #include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #define NAME_SIZE 25
-
-typedef struct point {
-    double x;
-    double y;
-} Point;
-
-typedef struct circle {
-    Point point;
-    double raduis;
-    double perimeter;
-    double area;
-} Circle;
-
-enum Errors {
-    _FILE,
-    NOT_FILE,
-    ER_NAME,
-    ER_NOT_DOUBLE,
-    ER_BACK_BRACE,
-    ER_UNEXPECT_TOKEN,
-    ER_EXPECT_COMMA,
-    ER_UNEXPECT_COMMA,
-};
 
 void print_error(int column, int status, int is_file, FILE* file)
 {
@@ -53,7 +31,7 @@ void print_error(int column, int status, int is_file, FILE* file)
                "'<double>'\e[0m\n",
                column);
         break;
-    case ER_BACK_BRACE:
+    case ER_BACKSLASH:
         printf("\e[1;31mError\e[0m at column %d: \e[1;31mexpected ')'\e[0m\n",
                column);
         break;
@@ -140,9 +118,9 @@ double get_number(int* column, int is_file, FILE* file)
         if (temp[i] == '(') {
             i++;
             if (is_file == _FILE)
-                print_error(*column + i, ER_BACK_BRACE, _FILE, file);
+                print_error(*column + i, ER_BACKSLASH, _FILE, file);
             else
-                print_error(*column + i, ER_BACK_BRACE, NOT_FILE, file);
+                print_error(*column + i, ER_BACKSLASH, NOT_FILE, file);
             exit(EXIT_FAILURE);
         }
 
@@ -159,8 +137,7 @@ double get_number(int* column, int is_file, FILE* file)
     }
     del_space(column, file);
     *column += i + 1;
-    char* eptr;
-    return strtod(temp, &eptr);
+    return strtod(temp, NULL);
 }
 
 bool expect(char expect, int* column, int status, int is_file, FILE* file)
@@ -229,7 +206,7 @@ void take_info_circle(Circle* circle, int* column, int is_file, FILE* file)
 
         circle->raduis = get_number(column, _FILE, file);
 
-        expect(')', column, ER_BACK_BRACE, _FILE, file);
+        expect(')', column, ER_BACKSLASH, _FILE, file);
 
         end_of_line(column, _FILE, file);
     } else {
@@ -238,7 +215,7 @@ void take_info_circle(Circle* circle, int* column, int is_file, FILE* file)
 
         circle->raduis = get_number(column, NOT_FILE, file);
 
-        expect(')', column, ER_BACK_BRACE, NOT_FILE, file);
+        expect(')', column, ER_BACKSLASH, NOT_FILE, file);
 
         end_of_line(column, NOT_FILE, file);
     }
@@ -281,7 +258,7 @@ void parser_stdin(FILE* stdin)
             }
 
             if (ch == ')') {
-                print_error(column, ER_BACK_BRACE, NOT_FILE, stdin);
+                print_error(column, ER_BACKSLASH, NOT_FILE, stdin);
                 exit(EXIT_FAILURE);
             }
 
@@ -316,7 +293,7 @@ void parser_file(FILE* file)
             }
 
             if (ch == ')') {
-                print_error(column, ER_BACK_BRACE, _FILE, file);
+                print_error(column, ER_BACKSLASH, _FILE, file);
                 exit(EXIT_FAILURE);
             }
 
@@ -324,25 +301,4 @@ void parser_file(FILE* file)
 
         } while ((ch = getc(file)) != '\n');
     }
-}
-
-int main(int argc, char* argv[])
-{
-    FILE* file = NULL;
-    if (argc < 2)
-        parser_stdin(stdin);
-    else if (argc == 2) {
-        if ((file = fopen(argv[1], "r")) == NULL) {
-            printf("\e[1;31mError\e[0m: can't open file \e[1;35m\"%s\"\e[0m\n",
-                   argv[1]);
-            exit(EXIT_FAILURE);
-        } else {
-            parser_file(file);
-            fclose(file);
-        }
-    } else {
-        printf("\e[1;35mUsage\e[0m: %s <filename>\n", argv[0]);
-    }
-
-    return 0;
 }
