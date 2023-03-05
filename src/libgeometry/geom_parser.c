@@ -356,7 +356,7 @@ void parser_file(FILE* file)
                     break;
                 } else if (strcmp(geom, "triangle") == 0) {
                     Triangle triangle;
-                    take_info_triangle(&triangle, &column, _FILE, stdin);
+                    take_info_triangle(&triangle, &column, _FILE, file);
                     printf("\nYou have entered: \n");
                     show_info_triangle(&triangle);
                     break;
