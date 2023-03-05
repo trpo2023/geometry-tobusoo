@@ -23,7 +23,7 @@ void print_error(int column, int status, int is_file, FILE* file)
     switch (status) {
     case ER_NAME:
         printf("\e[1;31mError\e[0m at column %d: \e[1;31mexpected "
-               "'circle'\e[0m\n",
+               "'circle' or 'triangle'\e[0m\n",
                column);
         break;
     case ER_NOT_DOUBLE:
@@ -63,10 +63,8 @@ void del_space(int* column, FILE* file)
     char ch;
     while ((ch = getc(file)) == ' ') {
         *column += 1;
-        continue;
     }
-    if (ch != ' ')
-        ungetc(ch, file);
+    ungetc(ch, file);
 }
 
 double get_number(int* column, int is_file, FILE* file)
@@ -106,7 +104,6 @@ double get_number(int* column, int is_file, FILE* file)
 
         if (temp[i] == ')') {
             ungetc(temp[i], file);
-            i++;
             break;
         }
 
@@ -116,7 +113,6 @@ double get_number(int* column, int is_file, FILE* file)
         }
 
         if (temp[i] == '(') {
-            i++;
             if (is_file == _FILE)
                 print_error(*column + i, ER_BACKSLASH, _FILE, file);
             else
@@ -125,7 +121,6 @@ double get_number(int* column, int is_file, FILE* file)
         }
 
         if (!isdigit(temp[i]) && temp[i] != '.' && temp[i] != '-') {
-            i++;
             if (is_file == _FILE)
                 print_error(*column + i, ER_NOT_DOUBLE, _FILE, file);
             else
@@ -135,8 +130,10 @@ double get_number(int* column, int is_file, FILE* file)
 
         i++;
     }
+    if (ch == ' ')
+        i++;
     del_space(column, file);
-    *column += i + 1;
+    *column += i;
     return strtod(temp, NULL);
 }
 
@@ -144,12 +141,13 @@ bool expect(char expect, int* column, int status, int is_file, FILE* file)
 {
     char ch;
     if ((ch = getc(file)) == expect) {
+        *column += 1;
         return true;
     } else {
         if (is_file == _FILE)
-            print_error(*column, status, _FILE, file);
+            print_error(*column - 1, status, _FILE, file);
         else
-            print_error(*column, status, NOT_FILE, file);
+            print_error(*column - 1, status, NOT_FILE, file);
         exit(EXIT_FAILURE);
     }
 }
@@ -302,6 +300,7 @@ void parser_stdin(FILE* stdin)
         do {
             if (ch == '(' || ch == ' ') {
                 to_lower_string(geom);
+                column++;
                 if (strcmp(geom, "circle") == 0) {
                     Circle circle;
                     take_info_circle(&circle, &column, NOT_FILE, stdin);
@@ -348,6 +347,7 @@ void parser_file(FILE* file)
         do {
             if (ch == '(' || ch == ' ') {
                 to_lower_string(geom);
+                column++;
                 if (strcmp(geom, "circle") == 0) {
                     Circle circle;
                     take_info_circle(&circle, &column, _FILE, file);
