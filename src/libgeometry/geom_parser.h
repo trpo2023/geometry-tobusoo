@@ -15,6 +15,15 @@ typedef struct circle {
     double area;
 } Circle;
 
+typedef struct triangle {
+    Point p1;
+    Point p2;
+    Point p3;
+    Point p4;
+    double perimeter;
+    double area;
+} Triangle;
+
 enum Errors {
     _FILE,
     NOT_FILE,
@@ -26,6 +35,7 @@ enum Errors {
     ER_UNEXPECT_COMMA,
 };
 
+void take_info_triangle(Triangle* tr, int* column, int is_file, FILE* file);
 void print_error(int column, int status, int is_file, FILE* file);
 void to_lower_string(char* string);
 void del_space(int* column, FILE* file);

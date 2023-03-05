@@ -71,7 +71,7 @@ void del_space(int* column, FILE* file)
 
 double get_number(int* column, int is_file, FILE* file)
 {
-    char temp[25];
+    char temp[25] = {0};
     char ch;
     int point_count = 0;
     int i = 0;
@@ -233,6 +233,37 @@ void show_info_circle(Circle* circle)
     printf("\tperimeter = %.4f\n", circle->perimeter);
 }
 
+void take_info_triangle(Triangle* tr, int* column, int is_file, FILE* file)
+{
+    if (is_file == NOT_FILE) {
+        expect('(', column, ER_BACKSLASH, NOT_FILE, file);
+        get_point(&tr->p1, column, NOT_FILE, file);
+        expect(',', column, ER_EXPECT_COMMA, NOT_FILE, file);
+        get_point(&tr->p2, column, NOT_FILE, file);
+        expect(',', column, ER_EXPECT_COMMA, NOT_FILE, file);
+        get_point(&tr->p3, column, NOT_FILE, file);
+        expect(',', column, ER_EXPECT_COMMA, NOT_FILE, file);
+        get_point(&tr->p4, column, NOT_FILE, file);
+        expect(')', column, ER_BACKSLASH, NOT_FILE, file);
+        expect(')', column, ER_BACKSLASH, NOT_FILE, file);
+
+        end_of_line(column, NOT_FILE, file);
+    } else {
+        expect('(', column, ER_BACKSLASH, _FILE, file);
+        get_point(&tr->p1, column, _FILE, file);
+        expect(',', column, ER_EXPECT_COMMA, _FILE, file);
+        get_point(&tr->p2, column, _FILE, file);
+        expect(',', column, ER_EXPECT_COMMA, _FILE, file);
+        get_point(&tr->p3, column, _FILE, file);
+        expect(',', column, ER_EXPECT_COMMA, _FILE, file);
+        get_point(&tr->p4, column, _FILE, file);
+        expect(')', column, ER_BACKSLASH, _FILE, file);
+        expect(')', column, ER_BACKSLASH, _FILE, file);
+
+        end_of_line(column, _FILE, file);
+    }
+}
+
 void parser_stdin(FILE* stdin)
 {
     char geom[NAME_SIZE] = {0};
@@ -251,6 +282,11 @@ void parser_stdin(FILE* stdin)
                     printf("\nYou have entered: \n");
                     show_info_circle(&circle);
                     break;
+                } else if (strcmp(geom, "triangle") == 0) {
+                    Triangle triangle;
+                    take_info_triangle(&triangle, &column, NOT_FILE, stdin);
+                    printf("Successfully entered a triangle!\n");
+                    break;
                 } else {
                     print_error(0, ER_NAME, NOT_FILE, stdin);
                     exit(EXIT_FAILURE);
@@ -265,6 +301,11 @@ void parser_stdin(FILE* stdin)
             geom[column++] = ch;
 
         } while ((ch = getc(stdin)) != '\n');
+
+        for (int i = 0; i < NAME_SIZE; i++) {
+            geom[i] = '\0';
+        }
+
         puts("Enter a new geometric shape (or q for exit):");
     }
 }
@@ -286,6 +327,11 @@ void parser_file(FILE* file)
                     printf("\nYou have entered: \n");
                     show_info_circle(&circle);
                     break;
+                } else if (strcmp(geom, "triangle") == 0) {
+                    Triangle triangle;
+                    take_info_triangle(&triangle, &column, _FILE, stdin);
+                    printf("Successfully entered a triangle!\n");
+                    break;
                 } else {
                     print_error(0, ER_NAME, _FILE, file);
                     exit(EXIT_FAILURE);
@@ -300,5 +346,9 @@ void parser_file(FILE* file)
             geom[column++] = ch;
 
         } while ((ch = getc(file)) != '\n');
+
+        for (int i = 0; i < NAME_SIZE; i++) {
+            geom[i] = '\0';
+        }
     }
 }
