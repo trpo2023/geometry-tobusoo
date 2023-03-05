@@ -264,6 +264,19 @@ void take_info_triangle(Triangle* tr, int* column, int is_file, FILE* file)
     }
 }
 
+void show_info_triangle(Triangle* tr)
+{
+    printf("triangle((%.1f %.1f, %.1f %.1f, %.1f %.1f, %.1f %.1f))\n",
+           tr->p1.x,
+           tr->p1.y,
+           tr->p2.x,
+           tr->p2.y,
+           tr->p3.x,
+           tr->p3.y,
+           tr->p4.x,
+           tr->p4.y);
+}
+
 void parser_stdin(FILE* stdin)
 {
     char geom[NAME_SIZE] = {0};
@@ -285,7 +298,8 @@ void parser_stdin(FILE* stdin)
                 } else if (strcmp(geom, "triangle") == 0) {
                     Triangle triangle;
                     take_info_triangle(&triangle, &column, NOT_FILE, stdin);
-                    printf("Successfully entered a triangle!\n");
+                    printf("\nYou have entered: \n");
+                    show_info_triangle(&triangle);
                     break;
                 } else {
                     print_error(0, ER_NAME, NOT_FILE, stdin);
@@ -330,7 +344,8 @@ void parser_file(FILE* file)
                 } else if (strcmp(geom, "triangle") == 0) {
                     Triangle triangle;
                     take_info_triangle(&triangle, &column, _FILE, stdin);
-                    printf("Successfully entered a triangle!\n");
+                    printf("\nYou have entered: \n");
+                    show_info_triangle(&triangle);
                     break;
                 } else {
                     print_error(0, ER_NAME, _FILE, file);

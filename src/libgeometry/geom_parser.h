@@ -35,6 +35,7 @@ enum Errors {
     ER_UNEXPECT_COMMA,
 };
 
+void show_info_triangle(Triangle* tr);
 void take_info_triangle(Triangle* tr, int* column, int is_file, FILE* file);
 void print_error(int column, int status, int is_file, FILE* file);
 void to_lower_string(char* string);
