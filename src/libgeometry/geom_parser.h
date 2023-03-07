@@ -1,5 +1,4 @@
 #pragma once
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -37,14 +36,6 @@ enum Errors {
 
 void show_info_triangle(Triangle* tr);
 void take_info_triangle(Triangle* tr, int* column, int is_file, FILE* file);
-void print_error(int column, int status, int is_file, FILE* file);
-void to_lower_string(char* string);
-void del_space(int* column, FILE* file);
-double get_number(int* column, int is_file, FILE* file);
-bool expect(char expect, int* column, int status, int is_file, FILE* file);
-bool unexpect(char unexpect, int* column, int status, int is_file, FILE* file);
-void end_of_line(int* column, int is_file, FILE* file);
-void get_point(Point* point, int* column, int is_file, FILE* file);
 void parser_file(FILE* file);
 void parser_stdin(FILE* stdin);
 void show_info_circle(Circle* circle);
