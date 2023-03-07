@@ -19,34 +19,32 @@ void print_error(int column, int status, int is_file, FILE* file)
     for (int i = 0; i < column; i++) {
         putchar(' ');
     }
-    printf("\e[1;31m^\e[0m\n");
+
+    printf(RED_COLOR("^") "\n");
     switch (status) {
     case ER_NAME:
-        printf("\e[1;31mError\e[0m at column %d: \e[1;31mexpected "
-               "'circle' or 'triangle'\e[0m\n",
-               column);
+        printf(RED_COLOR("Error") " at column %d: ", column);
+        printf(RED_COLOR("expected 'circle' or 'triangle'") "\n");
         break;
     case ER_NOT_DOUBLE:
-        printf("\e[1;31mError\e[0m at column %d: \e[1;31mexpected "
-               "'<double>'\e[0m\n",
-               column);
+        printf(RED_COLOR("Error") " at column %d: ", column);
+        printf(RED_COLOR("expected '<double>'") "\n");
         break;
     case ER_BACKSLASH:
-        printf("\e[1;31mError\e[0m at column %d: \e[1;31mexpected ')'\e[0m\n",
-               column);
+        printf(RED_COLOR("Error") " at column %d: ", column);
+        printf(RED_COLOR("expected ')'") "\n");
         break;
     case ER_UNEXPECT_TOKEN:
-        printf("\e[1;31mError\e[0m at column %d: \e[1;31munexpected "
-               "token\e[0m\n",
-               column);
+        printf(RED_COLOR("Error") " at column %d: ", column);
+        printf(RED_COLOR("unexpected token") "\n");
         break;
     case ER_EXPECT_COMMA:
-        printf("\e[1;31mError\e[0m at column %d: \e[1;31mexpected ','\e[0m\n",
-               column);
+        printf(RED_COLOR("Error") " at column %d: ", column);
+        printf(RED_COLOR("expected ','") "\n");
         break;
     case ER_UNEXPECT_COMMA:
-        printf("\e[1;31mError\e[0m at column %d: \e[1;31munexpected ','\e[0m\n",
-               column);
+        printf(RED_COLOR("Error") " at column %d: ", column);
+        printf(RED_COLOR("unexpected ','") "\n");
     }
 }
 

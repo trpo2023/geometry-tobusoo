@@ -1,4 +1,5 @@
 #include <libgeometry/geom_parser.h>
+#include <libgeometry/lexer.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -9,7 +10,7 @@ int main(int argc, char* argv[])
         parser_stdin(stdin);
     else if (argc == 2) {
         if ((file = fopen(argv[1], "r")) == NULL) {
-            printf("\e[1;31mError\e[0m: can't open file \e[1;35m\"%s\"\e[0m\n",
+            printf(RED_COLOR("Error") ": can't open file \e[1;35m\"%s\"\e[0m\n",
                    argv[1]);
             exit(EXIT_FAILURE);
         } else {
@@ -17,7 +18,7 @@ int main(int argc, char* argv[])
             fclose(file);
         }
     } else {
-        printf("\e[1;35mUsage\e[0m: %s <filename>\n", argv[0]);
+        printf(MAGENTA_COLOR("Usage") ": %s <filename>\n", argv[0]);
     }
 
     return 0;
