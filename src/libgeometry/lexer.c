@@ -13,7 +13,7 @@ void print_error(int column, int status, int is_file, FILE* file)
         char temp[256];
         fseek(file, -column - 1, SEEK_CUR);
         fgets(temp, 255, file);
-        printf("\n%s", temp);
+        printf("\n%s\n", temp);
     }
 
     for (int i = 0; i < column; i++) {
@@ -143,7 +143,7 @@ bool expect(char expect, int* column, int status, int is_file, FILE* file)
         return true;
     } else {
         if (is_file == _FILE)
-            print_error(*column - 1, status, _FILE, file);
+            print_error(*column, status, _FILE, file);
         else
             print_error(*column - 1, status, NOT_FILE, file);
         exit(EXIT_FAILURE);
