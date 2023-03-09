@@ -45,6 +45,11 @@ void print_error(int column, int status, int is_file, FILE* file)
     case ER_UNEXPECT_COMMA:
         printf(RED_COLOR("Error") " at column %d: ", column);
         printf(RED_COLOR("unexpected ','") "\n");
+        break;
+    case ER_NEGATIVE_R:
+        printf(RED_COLOR("Error") " at column %d: ", column);
+        printf(RED_COLOR("radius must be positive") "\n");
+        break;
     }
 }
 

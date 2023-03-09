@@ -9,7 +9,7 @@ typedef struct point {
 
 typedef struct circle {
     Point point;
-    double raduis;
+    double radius;
     double perimeter;
     double area;
 } Circle;
@@ -22,17 +22,6 @@ typedef struct triangle {
     double perimeter;
     double area;
 } Triangle;
-
-enum Errors {
-    _FILE,
-    NOT_FILE,
-    ER_NAME,
-    ER_NOT_DOUBLE,
-    ER_BACKSLASH,
-    ER_UNEXPECT_TOKEN,
-    ER_EXPECT_COMMA,
-    ER_UNEXPECT_COMMA,
-};
 
 void show_info_triangle(Triangle* tr);
 void take_info_triangle(Triangle* tr, int* column, int is_file, FILE* file);

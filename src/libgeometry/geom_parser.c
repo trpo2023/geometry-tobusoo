@@ -14,7 +14,12 @@ void take_info_circle(Circle* circle, int* column, int is_file, FILE* file)
         get_point(&circle->point, column, _FILE, file);
         expect(',', column, ER_EXPECT_COMMA, _FILE, file);
 
-        circle->raduis = get_number(column, _FILE, file);
+        circle->radius = get_number(column, _FILE, file);
+
+        if (circle->radius < 0) {
+            print_error(*column - 2, ER_NEGATIVE_R, _FILE, file);
+            exit(EXIT_FAILURE);
+        }
 
         expect(')', column, ER_BACKSLASH, _FILE, file);
 
@@ -23,14 +28,19 @@ void take_info_circle(Circle* circle, int* column, int is_file, FILE* file)
         get_point(&circle->point, column, NOT_FILE, file);
         expect(',', column, ER_EXPECT_COMMA, NOT_FILE, file);
 
-        circle->raduis = get_number(column, NOT_FILE, file);
+        circle->radius = get_number(column, NOT_FILE, file);
+
+        if (circle->radius < 0) {
+            print_error(*column - 2, ER_NEGATIVE_R, NOT_FILE, file);
+            exit(EXIT_FAILURE);
+        }
 
         expect(')', column, ER_BACKSLASH, NOT_FILE, file);
 
         end_of_line(column, NOT_FILE, file);
     }
-    circle->perimeter = 2 * M_PI * circle->raduis;
-    circle->area = M_PI * circle->raduis * circle->raduis;
+    circle->perimeter = 2 * M_PI * circle->radius;
+    circle->area = M_PI * circle->radius * circle->radius;
 }
 
 void show_info_circle(Circle* circle)
@@ -38,7 +48,7 @@ void show_info_circle(Circle* circle)
     printf("circle(%.2f %.2f, %.2f)\n",
            circle->point.x,
            circle->point.y,
-           circle->raduis);
+           circle->radius);
     printf("\tarea = %.4f\n", circle->area);
     printf("\tperimeter = %.4f\n", circle->perimeter);
 }
