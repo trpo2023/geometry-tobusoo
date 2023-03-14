@@ -86,10 +86,7 @@ double get_number(int* column, int is_file, FILE* file)
         if (temp[i] == '.') {
             point_count++;
             if (point_count > 1) {
-                if (is_file == _FILE)
-                    print_error(*column + i + 1, ER_NOT_DOUBLE, _FILE, file);
-                else
-                    print_error(*column + i + 1, ER_NOT_DOUBLE, NOT_FILE, file);
+                print_error(*column + i + 1, ER_NOT_DOUBLE, is_file, file);
                 exit(EXIT_FAILURE);
             }
         }
@@ -97,10 +94,7 @@ double get_number(int* column, int is_file, FILE* file)
         if (temp[i] == '-') {
             minus_count++;
             if (minus_count > 1) {
-                if (is_file == _FILE)
-                    print_error(*column + i + 1, ER_NOT_DOUBLE, _FILE, file);
-                else
-                    print_error(*column + i + 1, ER_NOT_DOUBLE, NOT_FILE, file);
+                print_error(*column + i + 1, ER_NOT_DOUBLE, is_file, file);
                 exit(EXIT_FAILURE);
             }
         }
@@ -116,18 +110,12 @@ double get_number(int* column, int is_file, FILE* file)
         }
 
         if (temp[i] == '(') {
-            if (is_file == _FILE)
-                print_error(*column + i, ER_BACKSLASH, _FILE, file);
-            else
-                print_error(*column + i, ER_BACKSLASH, NOT_FILE, file);
+            print_error(*column + i, ER_BACKSLASH, is_file, file);
             exit(EXIT_FAILURE);
         }
 
         if (!isdigit(temp[i]) && temp[i] != '.' && temp[i] != '-') {
-            if (is_file == _FILE)
-                print_error(*column + i, ER_NOT_DOUBLE, _FILE, file);
-            else
-                print_error(*column + i, ER_NOT_DOUBLE, NOT_FILE, file);
+            print_error(*column + i, ER_NOT_DOUBLE, is_file, file);
             exit(EXIT_FAILURE);
         }
 
@@ -159,10 +147,7 @@ bool unexpect(char unexpect, int* column, int status, int is_file, FILE* file)
 {
     char ch;
     if ((ch = getc(file)) == unexpect) {
-        if (is_file == _FILE)
-            print_error(*column, status, _FILE, file);
-        else
-            print_error(*column, status, NOT_FILE, file);
+        print_error(*column, status, is_file, file);
         exit(EXIT_FAILURE);
     }
     ungetc(ch, file);
@@ -171,17 +156,10 @@ bool unexpect(char unexpect, int* column, int status, int is_file, FILE* file)
 
 void get_point(Point* point, int* column, int is_file, FILE* file)
 {
-    if (is_file == _FILE) {
-        point->x = get_number(column, _FILE, file);
-        unexpect(',', column, ER_UNEXPECT_COMMA, _FILE, file);
+    point->x = get_number(column, is_file, file);
+    unexpect(',', column, ER_UNEXPECT_COMMA, is_file, file);
 
-        point->y = get_number(column, _FILE, file);
-    } else {
-        point->x = get_number(column, NOT_FILE, file);
-        unexpect(',', column, ER_UNEXPECT_COMMA, NOT_FILE, file);
-
-        point->y = get_number(column, NOT_FILE, file);
-    }
+    point->y = get_number(column, is_file, file);
 }
 
 void end_of_line(int* column, int is_file, FILE* file)
@@ -189,10 +167,7 @@ void end_of_line(int* column, int is_file, FILE* file)
     char ch;
     while ((ch = getc(file)) != '\n' && ch != EOF) {
         if (ch != ' ') {
-            if (is_file == _FILE)
-                print_error(*column, ER_UNEXPECT_TOKEN, _FILE, file);
-            else
-                print_error(*column, ER_UNEXPECT_TOKEN, NOT_FILE, file);
+            print_error(*column, ER_UNEXPECT_TOKEN, is_file, file);
             exit(EXIT_FAILURE);
         }
         *column += 1;

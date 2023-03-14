@@ -25,7 +25,6 @@ typedef struct triangle {
 
 void show_info_triangle(Triangle* tr);
 void take_info_triangle(Triangle* tr, int* column, int is_file, FILE* file);
-void parser_file(FILE* file);
-void parser_stdin(FILE* stdin);
+void parser(FILE* file, int is_file);
 void show_info_circle(Circle* circle);
 void take_info_circle(Circle* circle, int* column, int is_file, FILE* file);
