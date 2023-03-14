@@ -13,7 +13,6 @@ int main(int argc, char* argv[])
         if ((file = fopen(argv[1], "r")) == NULL) {
             printf(RED_COLOR("Error") ": can't open file \e[1;35m\"%s\"\e[0m\n",
                    argv[1]);
-            exit(EXIT_FAILURE);
         } else {
             parser(file, _FILE);
             fclose(file);

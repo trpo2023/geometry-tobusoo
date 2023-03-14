@@ -105,16 +105,12 @@ void parser(FILE* file, int is_file)
                     printf("\nYou have entered: \n");
                     show_info_triangle(&triangle);
                     break;
-                } else {
+                } else
                     print_error(0, ER_NAME, is_file, file);
-                    exit(EXIT_FAILURE);
-                }
             }
 
-            if (ch == ')') {
+            if (ch == ')')
                 print_error(column, ER_BACKSLASH, is_file, file);
-                exit(EXIT_FAILURE);
-            }
 
             geom[column++] = ch;
 

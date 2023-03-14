@@ -48,6 +48,7 @@ void print_error(int column, int status, int is_file, FILE* file)
         printf(RED_COLOR("radius must be positive") "\n");
         break;
     }
+    exit(EXIT_FAILURE);
 }
 
 void to_lower_string(char* string)
@@ -71,10 +72,8 @@ void count_char(char ch, char exp_ch, int* cnt, int* clmn, int is_file, FILE* f)
 {
     if (ch == exp_ch)
         *cnt += 1;
-    if (*cnt > 1) {
+    if (*cnt > 1)
         print_error(*clmn + 1, ER_NOT_DOUBLE, is_file, f);
-        exit(EXIT_FAILURE);
-    }
 }
 
 bool unexpect_char(char ch, char e_ch, FILE* file)
@@ -106,15 +105,11 @@ double get_number(int* column, int is_file, FILE* file)
         if (unexpect_char(temp[i], ',', file) == true)
             break;
 
-        if (temp[i] == '(') {
+        if (temp[i] == '(')
             print_error(*column + i, ER_BACKSLASH, is_file, file);
-            exit(EXIT_FAILURE);
-        }
 
-        if (!isdigit(temp[i]) && temp[i] != '.' && temp[i] != '-') {
+        if (!isdigit(temp[i]) && temp[i] != '.' && temp[i] != '-')
             print_error(*column + i, ER_NOT_DOUBLE, is_file, file);
-            exit(EXIT_FAILURE);
-        }
 
         i++;
     }
@@ -136,17 +131,16 @@ bool expect(char expect, int* column, int status, int is_file, FILE* file)
             print_error(*column, status, _FILE, file);
         else
             print_error(*column - 1, status, NOT_FILE, file);
-        exit(EXIT_FAILURE);
     }
+    return false;
 }
 
 bool unexpect(char unexpect, int* column, int status, int is_file, FILE* file)
 {
     char ch;
-    if ((ch = getc(file)) == unexpect) {
+    if ((ch = getc(file)) == unexpect)
         print_error(*column, status, is_file, file);
-        exit(EXIT_FAILURE);
-    }
+
     ungetc(ch, file);
     return true;
 }
@@ -163,10 +157,9 @@ void end_of_line(int* column, int is_file, FILE* file)
 {
     char ch;
     while ((ch = getc(file)) != '\n' && ch != EOF) {
-        if (ch != ' ') {
+        if (ch != ' ')
             print_error(*column, ER_UNEXPECT_TOKEN, is_file, file);
-            exit(EXIT_FAILURE);
-        }
+
         *column += 1;
     }
 }
