@@ -1,8 +1,7 @@
 #pragma once
-#include <libgeometry/geom_parser.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
+
 #define RED_COLOR(X) "\e[1;31m" X "\e[0m"
 #define MAGENTA_COLOR(X) "\e[1;35m" X "\e[0m"
 

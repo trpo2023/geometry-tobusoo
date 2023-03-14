@@ -1,7 +1,8 @@
-#include <libgeometry/geom_parser.h>
-#include <libgeometry/lexer.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#include <libgeometry/geom_parser.h>
+#include <libgeometry/lexer.h>
 
 int main(int argc, char* argv[])
 {

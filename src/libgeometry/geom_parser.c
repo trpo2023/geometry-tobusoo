@@ -1,11 +1,10 @@
-#include <ctype.h>
-#include <libgeometry/geom_parser.h>
-#include <libgeometry/lexer.h>
 #include <math.h>
-#include <stdbool.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include <libgeometry/geom_parser.h>
+#include <libgeometry/lexer.h>
+
 #define NAME_SIZE 25
 
 void take_info_circle(Circle* circle, int* column, int is_file, FILE* file)

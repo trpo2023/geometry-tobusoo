@@ -1,11 +1,8 @@
 #include <ctype.h>
+#include <stdlib.h>
+
 #include <libgeometry/geom_parser.h>
 #include <libgeometry/lexer.h>
-#include <math.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 void print_error(int column, int status, int is_file, FILE* file)
 {
