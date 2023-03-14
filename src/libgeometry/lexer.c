@@ -70,44 +70,44 @@ void del_space(int* column, FILE* file)
     ungetc(ch, file);
 }
 
+void count_char(char ch, char exp_ch, int* cnt, int* clmn, int is_file, FILE* f)
+{
+    if (ch == exp_ch)
+        *cnt += 1;
+    if (*cnt > 1) {
+        print_error(*clmn + 1, ER_NOT_DOUBLE, is_file, f);
+        exit(EXIT_FAILURE);
+    }
+}
+
+bool unexpect_char(char ch, char e_ch, FILE* file)
+{
+    if (ch == e_ch) {
+        ungetc(ch, file);
+        return true;
+    }
+    return false;
+}
+
 double get_number(int* column, int is_file, FILE* file)
 {
     char temp[25] = {0};
     char ch;
-    int point_count = 0;
-    int i = 0;
-    int minus_count = 0;
+    int point_count = 0, minus_count = 0, i = 0;
 
     del_space(column, file);
 
     while ((ch = getc(file)) != ' ') {
         temp[i] = ch;
 
-        if (temp[i] == '.') {
-            point_count++;
-            if (point_count > 1) {
-                print_error(*column + i + 1, ER_NOT_DOUBLE, is_file, file);
-                exit(EXIT_FAILURE);
-            }
-        }
+        count_char(temp[i], '.', &point_count, column + i, is_file, file);
+        count_char(temp[i], '-', &minus_count, column + i, is_file, file);
 
-        if (temp[i] == '-') {
-            minus_count++;
-            if (minus_count > 1) {
-                print_error(*column + i + 1, ER_NOT_DOUBLE, is_file, file);
-                exit(EXIT_FAILURE);
-            }
-        }
-
-        if (temp[i] == ')') {
-            ungetc(temp[i], file);
+        if (unexpect_char(temp[i], ')', file) == true)
             break;
-        }
 
-        if (temp[i] == ',') {
-            ungetc(temp[i], file);
+        if (unexpect_char(temp[i], ',', file) == true)
             break;
-        }
 
         if (temp[i] == '(') {
             print_error(*column + i, ER_BACKSLASH, is_file, file);
