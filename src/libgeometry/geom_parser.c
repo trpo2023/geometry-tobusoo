@@ -29,7 +29,8 @@ void take_info_circle(Circle* circle, int* column, int is_file, FILE* file)
 
 void show_info_circle(Circle* circle)
 {
-    printf("circle(%.2f %.2f, %.2f)\n",
+    printf("%s(%.2f %.2f, %.2f)\n",
+           circle->name,
            circle->point.x,
            circle->point.y,
            circle->radius);
@@ -66,7 +67,8 @@ void take_info_triangle(Triangle* tr, int* column, int is_file, FILE* file)
 
 void show_info_triangle(Triangle* tr)
 {
-    printf("triangle((%.1f %.1f, %.1f %.1f, %.1f %.1f, %.1f %.1f))\n",
+    printf("%s((%.1f %.1f, %.1f %.1f, %.1f %.1f, %.1f %.1f))\n",
+           tr->name,
            tr->p1.x,
            tr->p1.y,
            tr->p2.x,
@@ -94,13 +96,13 @@ void parser(FILE* file, int is_file)
                 to_lower_string(geom);
                 column++;
                 if (strcmp(geom, "circle") == 0) {
-                    Circle circle;
+                    Circle circle = {.name = geom};
                     take_info_circle(&circle, &column, is_file, file);
                     printf("\nYou have entered: \n");
                     show_info_circle(&circle);
                     break;
                 } else if (strcmp(geom, "triangle") == 0) {
-                    Triangle triangle;
+                    Triangle triangle = {.name = geom};
                     take_info_triangle(&triangle, &column, is_file, file);
                     printf("\nYou have entered: \n");
                     show_info_triangle(&triangle);

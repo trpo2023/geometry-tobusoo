@@ -11,6 +11,7 @@ typedef struct circle {
     double radius;
     double perimeter;
     double area;
+    char* name;
 } Circle;
 
 typedef struct triangle {
@@ -20,6 +21,7 @@ typedef struct triangle {
     Point p4;
     double perimeter;
     double area;
+    char* name;
 } Triangle;
 
 void show_info_triangle(Triangle* tr);
