@@ -14,7 +14,7 @@ void take_info_circle(Circle* circle, int* column, int is_file, FILE* file)
 
     circle->radius = get_number(column, is_file, file);
 
-    if (circle->radius < 0) {
+    if (circle->radius < 0 || circle->radius == -0) {
         print_error(*column - 2, ER_NEGATIVE_R, is_file, file);
         exit(EXIT_FAILURE);
     }
