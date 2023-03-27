@@ -6,6 +6,7 @@
 #define MAGENTA_COLOR(X) "\e[1;35m" X "\e[0m"
 
 enum Errors {
+    END_OF_NAME,
     _FILE,
     NOT_FILE,
     ER_NAME,
