@@ -81,6 +81,22 @@ void show_info_triangle(Triangle* tr)
     printf("\tperimeter = %.3f\n", tr->perimeter);
 }
 
+void circle_process(char* geom, int* column, int is_file, FILE* file)
+{
+    Circle circle = {.name = geom};
+    take_info_circle(&circle, column, is_file, file);
+    printf("\nYou have entered: \n");
+    show_info_circle(&circle);
+}
+
+void triangle_process(char* geom, int* column, int is_file, FILE* file)
+{
+    Triangle triangle = {.name = geom};
+    take_info_triangle(&triangle, column, is_file, file);
+    printf("\nYou have entered: \n");
+    show_info_triangle(&triangle);
+}
+
 void parser(FILE* file, int is_file)
 {
     char geom[NAME_SIZE] = {0};
@@ -96,16 +112,10 @@ void parser(FILE* file, int is_file)
                 to_lower_string(geom);
                 column++;
                 if (strcmp(geom, "circle") == 0) {
-                    Circle circle = {.name = geom};
-                    take_info_circle(&circle, &column, is_file, file);
-                    printf("\nYou have entered: \n");
-                    show_info_circle(&circle);
+                    circle_process(geom, &column, is_file, file);
                     break;
                 } else if (strcmp(geom, "triangle") == 0) {
-                    Triangle triangle = {.name = geom};
-                    take_info_triangle(&triangle, &column, is_file, file);
-                    printf("\nYou have entered: \n");
-                    show_info_triangle(&triangle);
+                    triangle_process(geom, &column, is_file, file);
                     break;
                 } else
                     print_error(0, ER_NAME, is_file, file);

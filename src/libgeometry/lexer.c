@@ -76,9 +76,9 @@ int count_char(char ch, char exp_ch, int* cnt)
     return *cnt;
 }
 
-bool unexpect_char(char ch, char e_ch, FILE* file)
+bool unexpect_char(char ch, char unexpected, FILE* file)
 {
-    if (ch == e_ch) {
+    if (ch == unexpected) {
         ungetc(ch, file);
         return true;
     }
