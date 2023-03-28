@@ -68,36 +68,38 @@ void del_space(int* column, FILE* file)
     ungetc(ch, file);
 }
 
-void count_char(char ch, char exp_ch, int* cnt, int* clmn, int is_file, FILE* f)
+int count_char(char ch, char exp_ch, int* cnt)
 {
     if (ch == exp_ch)
         *cnt += 1;
-    if (*cnt > 1)
-        print_error(*clmn + 1, ER_NOT_DOUBLE, is_file, f);
+    return *cnt;
 }
 
-bool unexpect_char(char ch, char e_ch, FILE* file)
+bool unexpect_char(char ch, char unexpected, FILE* file)
 {
-    if (ch == e_ch) {
+    if (ch == unexpected) {
         ungetc(ch, file);
         return true;
     }
     return false;
 }
 
-double get_number(int* column, int is_file, FILE* file)
+int read_str_number(char temp[], int* column, FILE* file)
 {
-    char temp[25] = {0};
     char ch;
     int point_count = 0, minus_count = 0, i = 0;
-
-    del_space(column, file);
-
-    while ((ch = getc(file)) != ' ') {
+    while ((ch = getc(file)) != ' ' && i < 25) {
         temp[i] = ch;
 
-        count_char(temp[i], '.', &point_count, column + i, is_file, file);
-        count_char(temp[i], '-', &minus_count, column + i, is_file, file);
+        if (count_char(temp[i], '.', &point_count) == 2) {
+            *column += i + 1;
+            return ER_NOT_DOUBLE;
+        }
+
+        if (count_char(temp[i], '-', &minus_count) == 2) {
+            *column += i + 1;
+            return ER_NOT_DOUBLE;
+        }
 
         if (unexpect_char(temp[i], ')', file) == true)
             break;
@@ -105,18 +107,40 @@ double get_number(int* column, int is_file, FILE* file)
         if (unexpect_char(temp[i], ',', file) == true)
             break;
 
-        if (temp[i] == '(')
-            print_error(*column + i, ER_BACKSLASH, is_file, file);
+        if (temp[i] == '(') {
+            *column += i;
+            return ER_BACKSLASH;
+        }
 
-        if (!isdigit(temp[i]) && temp[i] != '.' && temp[i] != '-')
-            print_error(*column + i, ER_NOT_DOUBLE, is_file, file);
-
+        if (!isdigit(temp[i]) && temp[i] != '.' && temp[i] != '-') {
+            *column += i;
+            return ER_NOT_DOUBLE;
+        }
         i++;
     }
     if (ch == ' ')
         i++;
-    del_space(column, file);
     *column += i;
+    return 0;
+}
+
+double get_number(int* column, int is_file, FILE* file)
+{
+    char temp[25] = {0};
+    del_space(column, file);
+
+    int result = read_str_number(temp, column, file);
+    switch (result) {
+    case ER_BACKSLASH:
+        print_error(*column, ER_BACKSLASH, is_file, file);
+        break;
+    case ER_NOT_DOUBLE:
+        print_error(*column, ER_NOT_DOUBLE, is_file, file);
+        break;
+    default:
+        del_space(column, file);
+        break;
+    }
     return strtod(temp, NULL);
 }
 

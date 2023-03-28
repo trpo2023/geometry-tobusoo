@@ -14,7 +14,7 @@ void take_info_circle(Circle* circle, int* column, int is_file, FILE* file)
 
     circle->radius = get_number(column, is_file, file);
 
-    if (circle->radius < 0) {
+    if (circle->radius < 0 || circle->radius == -0) {
         print_error(*column - 2, ER_NEGATIVE_R, is_file, file);
         exit(EXIT_FAILURE);
     }
@@ -29,7 +29,8 @@ void take_info_circle(Circle* circle, int* column, int is_file, FILE* file)
 
 void show_info_circle(Circle* circle)
 {
-    printf("circle(%.2f %.2f, %.2f)\n",
+    printf("%s(%.2f %.2f, %.2f)\n",
+           circle->name,
            circle->point.x,
            circle->point.y,
            circle->radius);
@@ -66,7 +67,8 @@ void take_info_triangle(Triangle* tr, int* column, int is_file, FILE* file)
 
 void show_info_triangle(Triangle* tr)
 {
-    printf("triangle((%.1f %.1f, %.1f %.1f, %.1f %.1f, %.1f %.1f))\n",
+    printf("%s((%.1f %.1f, %.1f %.1f, %.1f %.1f, %.1f %.1f))\n",
+           tr->name,
            tr->p1.x,
            tr->p1.y,
            tr->p2.x,
@@ -79,6 +81,44 @@ void show_info_triangle(Triangle* tr)
     printf("\tperimeter = %.3f\n", tr->perimeter);
 }
 
+void circle_process(char* geom, int* column, int is_file, FILE* file)
+{
+    Circle circle = {.name = geom};
+    take_info_circle(&circle, column, is_file, file);
+    printf("\nYou have entered: \n");
+    show_info_circle(&circle);
+}
+
+void triangle_process(char* geom, int* column, int is_file, FILE* file)
+{
+    Triangle triangle = {.name = geom};
+    take_info_triangle(&triangle, column, is_file, file);
+    printf("\nYou have entered: \n");
+    show_info_triangle(&triangle);
+}
+
+int read_str(int* column, char ch, char geom[], FILE* file)
+{
+    *column = 0;
+    do {
+        if (ch == '(' || ch == ' ') {
+            return END_OF_NAME;
+        }
+        if (ch == ')')
+            return ER_BACKSLASH;
+
+        geom[*column] = ch;
+        *column += 1;
+    } while ((ch = getc(file)) != '\n');
+    return ER_NAME;
+}
+
+void str_clear(char* str, size_t size)
+{
+    for (int i = 0; i < size; i++)
+        str[i] = '\0';
+}
+
 void parser(FILE* file, int is_file)
 {
     char geom[NAME_SIZE] = {0};
@@ -87,38 +127,25 @@ void parser(FILE* file, int is_file)
 
     if (is_file == NOT_FILE)
         puts("Enter a geometric shape (or q for exit):");
+
     while ((ch = getc(file)) != EOF && ch != 'q') {
-        column = 0;
-        do {
-            if (ch == '(' || ch == ' ') {
-                to_lower_string(geom);
-                column++;
-                if (strcmp(geom, "circle") == 0) {
-                    Circle circle;
-                    take_info_circle(&circle, &column, is_file, file);
-                    printf("\nYou have entered: \n");
-                    show_info_circle(&circle);
-                    break;
-                } else if (strcmp(geom, "triangle") == 0) {
-                    Triangle triangle;
-                    take_info_triangle(&triangle, &column, is_file, file);
-                    printf("\nYou have entered: \n");
-                    show_info_triangle(&triangle);
-                    break;
-                } else
-                    print_error(0, ER_NAME, is_file, file);
-            }
-
-            if (ch == ')')
-                print_error(column, ER_BACKSLASH, is_file, file);
-
-            geom[column++] = ch;
-
-        } while ((ch = getc(file)) != '\n');
-
-        for (int i = 0; i < NAME_SIZE; i++) {
-            geom[i] = '\0';
+        int result = read_str(&column, ch, geom, file);
+        if (result == END_OF_NAME) {
+            to_lower_string(geom);
+            column++;
+            if (strcmp(geom, "circle") == 0) {
+                circle_process(geom, &column, is_file, file);
+            } else if (strcmp(geom, "triangle") == 0) {
+                triangle_process(geom, &column, is_file, file);
+            } else
+                print_error(0, ER_NAME, is_file, file);
+        } else if (result == ER_BACKSLASH) {
+            print_error(column, ER_BACKSLASH, is_file, file);
+        } else {
+            print_error(0, ER_NAME, is_file, file);
         }
+
+        str_clear(geom, NAME_SIZE);
 
         if (is_file == NOT_FILE)
             puts("Enter a new geometric shape (or q for exit):");
