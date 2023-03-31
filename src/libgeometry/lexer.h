@@ -18,6 +18,9 @@ enum Errors {
     ER_NEGATIVE_R
 };
 
+bool unexpect_char(char ch, char unexpected, FILE* file);
+int read_str_number(char temp[], int* column, FILE* file);
+int count_char(char ch, char exp_ch, int* cnt);
 void print_error(int column, int status, int is_file, FILE* file);
 void to_lower_string(char* string);
 void del_space(int* column, FILE* file);
