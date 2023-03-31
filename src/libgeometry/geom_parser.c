@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <libgeometry/calculate.h>
 #include <libgeometry/geom_parser.h>
 #include <libgeometry/lexer.h>
 
@@ -23,8 +24,7 @@ void take_info_circle(Circle* circle, int* column, int is_file, FILE* file)
 
     end_of_line(column, is_file, file);
 
-    circle->perimeter = 2 * M_PI * circle->radius;
-    circle->area = M_PI * circle->radius * circle->radius;
+    circle_calculate(circle);
 }
 
 void show_info_circle(Circle* circle)
@@ -53,16 +53,7 @@ void take_info_triangle(Triangle* tr, int* column, int is_file, FILE* file)
 
     end_of_line(column, is_file, file);
 
-    double area_l, area_r;
-    area_l = (tr->p2.x - tr->p1.x) * (tr->p3.y - tr->p1.y);
-    area_r = (tr->p3.x - tr->p1.x) * (tr->p2.y - tr->p1.y);
-    tr->area = 0.5 * abs(area_l - area_r);
-
-    double len_1, len_2, len_3;
-    len_1 = sqrt(pow(tr->p1.x - tr->p2.x, 2) + pow(tr->p1.y - tr->p2.y, 2));
-    len_2 = sqrt(pow(tr->p1.x - tr->p3.x, 2) + pow(tr->p1.y - tr->p3.y, 2));
-    len_3 = sqrt(pow(tr->p2.x - tr->p3.x, 2) + pow(tr->p2.y - tr->p3.y, 2));
-    tr->perimeter = len_1 + len_2 + len_3;
+    triangle_calculate(tr);
 }
 
 void show_info_triangle(Triangle* tr)

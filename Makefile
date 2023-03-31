@@ -55,6 +55,10 @@ $(OBJ_DIR)/test/main.o: test/main.c
 $(OBJ_DIR)/test/tests.o: test/tests.c
 	$(CC) $(TESTFLAGS) $(CFLAGS) $(DEPSFLAGS) -c -o $@ $<
 
+# RUN
+run: all
+	$(APP_PATH) $(BIN_DIR)/test.txt
+
 # CLEAN
 clean:
 	$(RM) $(APP_PATH) $(TEST_PATH) $(OBJ_DIR)/*/*/*.[aod] $(OBJ_DIR)/test/*.[aod]
