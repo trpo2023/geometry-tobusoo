@@ -28,7 +28,7 @@ double calculate_perimetr_triangle(Triangle* tr)
     return len_1 + len_2 + len_3;
 }
 
-double calculate_area_trinagle(Triangle* tr)
+double calculate_area_triangle(Triangle* tr)
 {
     double area_l, area_r;
     area_l = (tr->p2.x - tr->p1.x) * (tr->p3.y - tr->p1.y);
@@ -38,6 +38,6 @@ double calculate_area_trinagle(Triangle* tr)
 
 void triangle_calculate(Triangle* tr)
 {
-    tr->area = calculate_area_trinagle(tr);
+    tr->area = calculate_area_triangle(tr);
     tr->perimeter = calculate_perimetr_triangle(tr);
 }

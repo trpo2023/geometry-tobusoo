@@ -1,6 +1,7 @@
 #include <ctest.h>
 #include <stdio.h>
 
+#include <libgeometry/calculate.h>
 #include <libgeometry/geom_parser.h>
 #include <libgeometry/lexer.h>
 
@@ -44,7 +45,9 @@ CTEST(lexer, read_str_number)
 {
     char temp[25] = {0};
     int column = 0;
-    FILE* file = fopen("test/read_str_number.txt", "r");
+    FILE* file = fopen("test/read_str_number.txt", "w+");
+    fprintf(file, "3.5 -1.5 0 4545454 12x 321( ");
+    fseek(file, 0, SEEK_SET);
     int result = read_str_number(temp, &column, file);
     int expected = 0;
     ASSERT_STR(temp, "3.5");
@@ -78,6 +81,7 @@ CTEST(lexer, read_str_number)
     int result5 = read_str_number(temp5, &column, file);
     int expected5 = ER_BACKSLASH;
     ASSERT_EQUAL(expected5, result5);
+    remove("test/read_str_number.txt");
 }
 
 CTEST(lexer, unexpect_char)
@@ -97,4 +101,44 @@ CTEST(lexer, unexpect_char)
     remove("unexpect_char_test.txt");
     bool expect1 = true;
     ASSERT_EQUAL(expect1, result1);
+}
+
+CTEST(calculate, circle_perimetr)
+{
+    Circle circle = {.radius = 1.5};
+
+    double result = calculate_perimetr_circle(&circle);
+    double expect = 9.4247;
+    double tol = 1e-4;
+    ASSERT_DBL_NEAR_TOL(expect, result, tol);
+}
+
+CTEST(calculate, circle_area)
+{
+    Circle circle = {.radius = 1.5};
+
+    double result = calculate_area_circle(&circle);
+    double expect = 7.0686;
+    double tol = 1e-4;
+    ASSERT_DBL_NEAR_TOL(expect, result, tol);
+}
+
+CTEST(calculate, triangle_perimetr)
+{
+    Triangle triangle = {{-3, -2}, {-1, 0}, {-3, 2}, {-3, -2}};
+
+    double result = calculate_perimetr_triangle(&triangle);
+    double expect = 9.657;
+    double tol = 1e-3;
+    ASSERT_DBL_NEAR_TOL(expect, result, tol);
+}
+
+CTEST(calculate, triangle_area)
+{
+    Triangle triangle = {{-3, -2}, {-1, 0}, {-3, 2}, {-3, -2}};
+
+    double result = calculate_area_triangle(&triangle);
+    double expect = 4;
+    double tol = 1e-4;
+    ASSERT_DBL_NEAR_TOL(expect, result, tol);
 }
