@@ -142,3 +142,39 @@ CTEST(calculate, triangle_area)
     double tol = 1e-4;
     ASSERT_DBL_NEAR_TOL(expect, result, tol);
 }
+
+CTEST(parser, read_geom_name_triangle)
+{
+    int column = 1;
+    char ch = 0;
+    char geom[25] = {0};
+    FILE* file = fopen("test/read_geom_name.txt", "w+");
+    fprintf(file, "triangle(");
+    fseek(file, 0, SEEK_SET);
+
+    ch = getc(file);
+    geom[0] = ch;
+    int result = read_str(&column, ch, geom, file);
+    int expect = END_OF_NAME;
+    remove("test/read_geom_name.txt");
+    ASSERT_STR("triangle", geom);
+    ASSERT_EQUAL(expect, result);
+}
+
+CTEST(parser, read_geom_name_circle)
+{
+    int column = 1;
+    char ch = 0;
+    char geom[25] = {0};
+    FILE* file = fopen("test/read_geom_name.txt", "w+");
+    fprintf(file, "circle ");
+    fseek(file, 0, SEEK_SET);
+
+    ch = getc(file);
+    geom[0] = ch;
+    int result = read_str(&column, ch, geom, file);
+    int expect = END_OF_NAME;
+    remove("test/read_geom_name.txt");
+    ASSERT_STR("circle", geom);
+    ASSERT_EQUAL(expect, result);
+}

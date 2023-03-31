@@ -24,6 +24,7 @@ typedef struct triangle {
     char* name;
 } Triangle;
 
+int read_str(int* column, char ch, char geom[], FILE* file);
 void show_info_triangle(Triangle* tr);
 void take_info_triangle(Triangle* tr, int* column, int is_file, FILE* file);
 void parser(FILE* file, int is_file);
