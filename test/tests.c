@@ -46,7 +46,7 @@ CTEST(lexer, read_str_number)
 {
     char temp[NUM_LEN] = {0};
     int column = 0;
-    FILE* file = fopen("test/read_str_number.txt", "w+");
+    FILE* file = fopen("read_str_number.txt", "w+");
     fprintf(file, "3.5 -1.5 0 4545454 12x 321( ");
     fseek(file, 0, SEEK_SET);
 
@@ -83,7 +83,7 @@ CTEST(lexer, read_str_number)
     result = read_str_number(temp5, &column, file);
     expected = ER_BACKSLASH;
     ASSERT_EQUAL(expected, result);
-    remove("test/read_str_number.txt");
+    remove("read_str_number.txt");
 }
 
 CTEST(lexer, unexpect_char)
@@ -147,7 +147,7 @@ CTEST(parser, read_geom_name_triangle)
     int column = 1;
     char ch = 0;
     char geom[25] = {0};
-    FILE* file = fopen("test/read_geom_name.txt", "w+");
+    FILE* file = fopen("read_geom_name.txt", "w+");
     fprintf(file, "triangle(");
     fseek(file, 0, SEEK_SET);
 
@@ -155,7 +155,7 @@ CTEST(parser, read_geom_name_triangle)
     geom[0] = ch;
     int result = read_str(&column, ch, geom, file);
     int expect = END_OF_NAME;
-    remove("test/read_geom_name.txt");
+    remove("read_geom_name.txt");
     ASSERT_STR("triangle", geom);
     ASSERT_EQUAL(expect, result);
 }
@@ -165,7 +165,7 @@ CTEST(parser, read_geom_name_circle)
     int column = 1;
     char ch = 0;
     char geom[25] = {0};
-    FILE* file = fopen("test/read_geom_name.txt", "w+");
+    FILE* file = fopen("read_geom_name.txt", "w+");
     fprintf(file, "circle ");
     fseek(file, 0, SEEK_SET);
 
@@ -173,7 +173,7 @@ CTEST(parser, read_geom_name_circle)
     geom[0] = ch;
     int result = read_str(&column, ch, geom, file);
     int expect = END_OF_NAME;
-    remove("test/read_geom_name.txt");
+    remove("read_geom_name.txt");
     ASSERT_STR("circle", geom);
     ASSERT_EQUAL(expect, result);
 }
