@@ -3,6 +3,7 @@
 
 #include <libgeometry/calculate.h>
 #include <libgeometry/geom_parser.h>
+#include <libgeometry/intersect.h>
 #include <libgeometry/lexer.h>
 
 CTEST(lexer, count_char)
@@ -176,5 +177,70 @@ CTEST(parser, read_geom_name_circle)
     int expect = END_OF_NAME;
     remove("test/read_geom_name.txt");
     ASSERT_STR("circle", geom);
+    ASSERT_EQUAL(expect, result);
+}
+
+CTEST(intersect, circles)
+{
+    Circle a = {.point.x = 2, .point.y = 3, .radius = 1};
+    Circle b = {.point.x = 0, .point.y = 0, .radius = 1};
+
+    bool result = is_intersect_circles(a, b);
+    bool expect = false;
+    ASSERT_EQUAL(expect, result);
+
+    Circle x = {.point.x = 0, .point.y = 0, .radius = 1};
+    Circle y = {.point.x = 0, .point.y = 0, .radius = 1};
+
+    result = is_intersect_circles(x, y);
+    expect = true;
+    ASSERT_EQUAL(expect, result);
+
+    Circle k = {.point.x = 1, .point.y = 2, .radius = 1};
+    Circle m = {.point.x = 0, .point.y = 0, .radius = 5};
+
+    result = is_intersect_circles(k, m);
+    expect = true;
+    ASSERT_EQUAL(expect, result);
+}
+
+CTEST(intersect, triangles)
+{
+    Triangle a = {.p1 = {1, 1}, .p2 = {2, 4}, .p3 = {3, 3}, .p4 = {1, 1}};
+    Triangle b = {.p1 = {2, 3}, .p2 = {4, 5}, .p3 = {4, 2}, .p4 = {2, 3}};
+
+    bool result = is_intersect_triangles(a, b);
+    bool expect = true;
+    ASSERT_EQUAL(expect, result);
+
+    Triangle x = {.p1 = {-3, -2}, .p2 = {-1, 0}, .p3 = {-3, 2}, .p4 = {-3, -2}};
+    Triangle y = {.p1 = {3, -2}, .p2 = {-1, 0}, .p3 = {-3, 2}, .p4 = {3, -2}};
+
+    result = is_intersect_triangles(x, y);
+    expect = false;
+    ASSERT_EQUAL(expect, result);
+}
+
+CTEST(intersect, circle_and_triangle)
+{
+    Circle circle = {.point = {0, 0}, .radius = 1.5};
+    Triangle t = {.p1 = {-3, -2}, .p2 = {-1, 0}, .p3 = {-3, 2}, .p4 = {-3, -2}};
+
+    bool result = is_intersect_circle_triangle(circle, t);
+    bool expect = true;
+    ASSERT_EQUAL(expect, result);
+
+    Circle circle1 = {.point = {0, 0}, .radius = 1.5};
+    Triangle t1 = {.p1 = {3, -2}, .p2 = {3, 2}, .p3 = {1, 0}, .p4 = {3, -2}};
+
+    result = is_intersect_circle_triangle(circle1, t1);
+    expect = true;
+    ASSERT_EQUAL(expect, result);
+
+    Circle circle2 = {.point = {0, 0}, .radius = 1.5};
+    Triangle t2 = {.p1 = {3, -2}, .p2 = {3, 2}, .p3 = {2, 0}, .p4 = {3, -2}};
+
+    result = is_intersect_circle_triangle(circle2, t2);
+    expect = false;
     ASSERT_EQUAL(expect, result);
 }
