@@ -19,13 +19,20 @@ bool is_intersect_circles(Circle a, Circle b)
     return true;
 }
 
-bool is_intersect_triangles(Triangle a, Triangle b)
+bool is_intersect_triangles_help(Triangle a, Triangle b)
 {
     double f1 = a.p1.x * b.p2.y - a.p1.y * b.p2.x;
     double f2 = a.p2.x * b.p3.y - a.p2.y * b.p3.x;
     double f3 = a.p3.x * b.p1.y - a.p3.y * b.p1.x;
 
     return (f1 > 0 || f2 > 0 || f3 > 0);
+}
+
+bool is_intersect_triangles(Triangle a, Triangle b)
+{
+    bool res1 = is_intersect_triangles_help(a, b);
+    bool res2 = is_intersect_triangles_help(b, a);
+    return (res1 && res2);
 }
 
 bool is_intersect_circle_line(Circle circle, Point p1, Point p2)
