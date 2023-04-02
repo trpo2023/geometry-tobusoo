@@ -33,7 +33,7 @@ double calculate_area_triangle(Triangle* tr)
     double area_l, area_r;
     area_l = (tr->p2.x - tr->p1.x) * (tr->p3.y - tr->p1.y);
     area_r = (tr->p3.x - tr->p1.x) * (tr->p2.y - tr->p1.y);
-    return 0.5 * abs(area_l - area_r);
+    return 0.5 * fabs(area_l - area_r);
 }
 
 void triangle_calculate(Triangle* tr)

@@ -4,6 +4,7 @@
 
 #define RED_COLOR(X) "\e[1;31m" X "\e[0m"
 #define MAGENTA_COLOR(X) "\e[1;35m" X "\e[0m"
+#define NUM_LEN 25
 
 enum Errors {
     END_OF_NAME,

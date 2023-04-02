@@ -88,7 +88,7 @@ int read_str_number(char temp[], int* column, FILE* file)
 {
     char ch;
     int point_count = 0, minus_count = 0, i = 0;
-    while ((ch = getc(file)) != ' ' && i < 25) {
+    while ((ch = getc(file)) != ' ' && i < NUM_LEN) {
         temp[i] = ch;
 
         if (count_char(temp[i], '.', &point_count) == 2) {
@@ -126,7 +126,7 @@ int read_str_number(char temp[], int* column, FILE* file)
 
 double get_number(int* column, int is_file, FILE* file)
 {
-    char temp[25] = {0};
+    char temp[NUM_LEN] = {0};
     del_space(column, file);
 
     int result = read_str_number(temp, column, file);
