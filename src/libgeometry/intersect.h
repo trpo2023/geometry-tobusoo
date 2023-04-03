@@ -1,3 +1,4 @@
+#pragma once
 #include <stdbool.h>
 
 #include <libgeometry/geom_parser.h>
