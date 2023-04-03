@@ -20,7 +20,7 @@ void take_info_circle(Circle* circle, int* column, int is_file, FILE* file)
         exit(EXIT_FAILURE);
     }
 
-    expect(')', column, ER_BACKSLASH, is_file, file);
+    expect(')', column, ER_R_PARENTNESIS, is_file, file);
 
     end_of_line(column, is_file, file);
 
@@ -41,7 +41,7 @@ void show_info_circle(Circle* circle)
 
 void take_info_triangle(Triangle* tr, int* column, int is_file, FILE* file)
 {
-    expect('(', column, ER_BACKSLASH, is_file, file);
+    expect('(', column, ER_R_PARENTNESIS, is_file, file);
     get_point(&tr->p1, column, is_file, file);
     expect(',', column, ER_EXPECT_COMMA, is_file, file);
     get_point(&tr->p2, column, is_file, file);
@@ -49,8 +49,8 @@ void take_info_triangle(Triangle* tr, int* column, int is_file, FILE* file)
     get_point(&tr->p3, column, is_file, file);
     expect(',', column, ER_EXPECT_COMMA, is_file, file);
     get_point(&tr->p4, column, is_file, file);
-    expect(')', column, ER_BACKSLASH, is_file, file);
-    expect(')', column, ER_BACKSLASH, is_file, file);
+    expect(')', column, ER_R_PARENTNESIS, is_file, file);
+    expect(')', column, ER_R_PARENTNESIS, is_file, file);
 
     end_of_line(column, is_file, file);
 
@@ -100,7 +100,7 @@ int read_str(int* column, char ch, char geom[], FILE* file)
             return END_OF_NAME;
         }
         if (ch == ')')
-            return ER_BACKSLASH;
+            return ER_R_PARENTNESIS;
 
         geom[*column] = ch;
         *column += 1;
@@ -212,8 +212,8 @@ void parser(FILE* file, int is_file)
                 arr[cnt++] = TRIANGLE;
             } else
                 print_error(0, ER_NAME, is_file, file);
-        } else if (result == ER_BACKSLASH) {
-            print_error(column, ER_BACKSLASH, is_file, file);
+        } else if (result == ER_R_PARENTNESIS) {
+            print_error(column, ER_R_PARENTNESIS, is_file, file);
         } else {
             print_error(0, ER_NAME, is_file, file);
         }

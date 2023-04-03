@@ -81,7 +81,7 @@ CTEST(lexer, read_str_number)
     file->_IO_read_ptr++;
     char temp5[NUM_LEN] = {0};
     result = read_str_number(temp5, &column, file);
-    expected = ER_BACKSLASH;
+    expected = ER_R_PARENTNESIS;
     ASSERT_EQUAL(expected, result);
     remove("read_str_number.txt");
 }
