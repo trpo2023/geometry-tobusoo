@@ -46,7 +46,7 @@ $(OBJ_DIR)/%.o: %.c
 test: $(LIB_PATH) $(TEST_PATH)
 	$(TEST_PATH)
 
-$(TEST_PATH): $(TEST_OBJECTS) $(LIB_OBJECTS)
+$(TEST_PATH): $(TEST_OBJECTS) $(LIB_PATH)
 	$(CC) $(TESTFLAGS) $(CFLAGS) $(DEPSFLAGS) -o $@ $^ -lm
 
 $(OBJ_DIR)/test/main.o: test/main.c
