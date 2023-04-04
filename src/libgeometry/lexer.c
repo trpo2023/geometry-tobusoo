@@ -27,7 +27,7 @@ void print_error(int column, int status, int is_file, FILE* file)
         printf(RED_COLOR("Error") " at column %d: ", column);
         printf(RED_COLOR("expected '<double>'") "\n");
         break;
-    case ER_BACKSLASH:
+    case ER_R_PARENTNESIS:
         printf(RED_COLOR("Error") " at column %d: ", column);
         printf(RED_COLOR("expected ')'") "\n");
         break;
@@ -88,7 +88,7 @@ int read_str_number(char temp[], int* column, FILE* file)
 {
     char ch;
     int point_count = 0, minus_count = 0, i = 0;
-    while ((ch = getc(file)) != ' ' && i < 25) {
+    while ((ch = getc(file)) != ' ' && i < NUM_LEN) {
         temp[i] = ch;
 
         if (count_char(temp[i], '.', &point_count) == 2) {
@@ -109,7 +109,7 @@ int read_str_number(char temp[], int* column, FILE* file)
 
         if (temp[i] == '(') {
             *column += i;
-            return ER_BACKSLASH;
+            return ER_R_PARENTNESIS;
         }
 
         if (!isdigit(temp[i]) && temp[i] != '.' && temp[i] != '-') {
@@ -126,13 +126,13 @@ int read_str_number(char temp[], int* column, FILE* file)
 
 double get_number(int* column, int is_file, FILE* file)
 {
-    char temp[25] = {0};
+    char temp[NUM_LEN] = {0};
     del_space(column, file);
 
     int result = read_str_number(temp, column, file);
     switch (result) {
-    case ER_BACKSLASH:
-        print_error(*column, ER_BACKSLASH, is_file, file);
+    case ER_R_PARENTNESIS:
+        print_error(*column, ER_R_PARENTNESIS, is_file, file);
         break;
     case ER_NOT_DOUBLE:
         print_error(*column, ER_NOT_DOUBLE, is_file, file);
